@@ -27,30 +27,40 @@ export class UKPostCodeValidation implements ComponentFramework.StandardControl<
      * @param container If a control is marked control-type='standard', it will receive an empty div element within which it can render its content.
      */
     public init(context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void, state: ComponentFramework.Dictionary, container:HTMLDivElement): void
-    {
-        // Add control initialization code
-        this._inputElement = document.createElement("input");
-        this._inputElement.setAttribute("type", "text");
-        this._inputElement.setAttribute("placeholder", "");
-        this._value = context.parameters.postCode.raw!;
-        this._inputElement.value = this._value;
-        this._notifyOutputChanged = notifyOutputChanged;
-        this._refreshData = this.refreshData.bind(this);
-        this.labelElement = document.createElement("label");
-        
-       
-        
+{
+    // Add control initialization code
+    this._inputElement = document.createElement("input");
+    this._inputElement.setAttribute("type", "text");
+    this._inputElement.setAttribute("placeholder", "");
+    this._value = context.parameters.postCode.raw!;
+    this._inputElement.value = this._value;
+    this._notifyOutputChanged = notifyOutputChanged;
+    this._refreshData = this.refreshData.bind(this);
+    this.labelElement = document.createElement("label");
+    var errorIconLabelElement = document.createElement("label");
+    errorIconLabelElement.innerHTML = "";
+    errorIconLabelElement.classList.add("icon");
+    
+    var errorLabelElement = document.createElement("label");
+    errorLabelElement.innerHTML = context.resources.getString("This is not a valid UK postcode.");
+    
+    this._container = document.createElement("div");
+    this._container.classList.add("Error");
+    this._container.appendChild(errorIconLabelElement);
+    this._container.appendChild(errorLabelElement);
 
-        if(this.validation.test(context.parameters.postCode.raw!) == true && context.parameters.postCode.raw!.length > 0) {
-            this._inputElement.setAttribute("style", "background: green");
-            this.labelElement.innerHTML = "Success";
-        } else if (context.parameters.postCode.raw!.length == 0) {
-            this._inputElement.setAttribute("style", "background: white");
-        } else {
-            this._inputElement.setAttribute("style", "background: red");
-        }
-        container.appendChild(this._inputElement);
+    if(this.validation.test(context.parameters.postCode.raw!) == true && context.parameters.postCode.raw!.length > 0) {
+        this._inputElement.setAttribute("style", "background: green");
+        this.labelElement.innerHTML = "Success";
+    } else if (context.parameters.postCode.raw!.length == 0) {
+        this._inputElement.setAttribute("style", "background: white");
+    } else {
+        this._inputElement.setAttribute("style", "background: red");
     }
+    container.appendChild(this._inputElement);
+    container.appendChild(this._container); // append error container after input container
+}
+
 
     public refreshData(evt: Event): void {
         this._value = (this._inputElement.value as any) as string;
@@ -63,17 +73,20 @@ export class UKPostCodeValidation implements ComponentFramework.StandardControl<
      * @param context The entire property bag available to control via Context Object; It contains values as set up by the customizer mapped to names defined in the manifest, as well as utility functions
      */
     public updateView(context: ComponentFramework.Context<IInputs>): void
-    {
-        if(this.validation.test(context.parameters.postCode.raw!) == true && context.parameters.postCode.raw!.length > 0) {
-            this._inputElement.setAttribute("style", "background: green");
-            this.labelElement.innerHTML = "Success";
-        } else if (context.parameters.postCode.raw!.length == 0) {
-            this._inputElement.setAttribute("style", "background: white");
-        } else {
-            this._inputElement.setAttribute("style", "background: red");
-        }
-        this._inputElement.setAttribute("value", context.parameters.postCode.formatted ? context.parameters.postCode.formatted : "");
+{
+    if(this.validation.test(context.parameters.postCode.raw!) == true && context.parameters.postCode.raw!.length > 0) {
+        this._inputElement.setAttribute("style", "background: green");
+        this.labelElement.innerHTML = "Success";
+        this._container.style.display = "none"; // Hide the error container
+    } else if (context.parameters.postCode.raw!.length == 0) {
+        this._inputElement.setAttribute("style", "background: white");
+        this._container.style.display = "none"; // Hide the error container
+    } else {
+        this._inputElement.setAttribute("style", "background: red");
+        this._container.style.display = "block"; // Display the error container
     }
+    this._inputElement.setAttribute("value", context.parameters.postCode.formatted ? context.parameters.postCode.formatted : "");
+}
 
     /**
      * It is called by the framework prior to a control receiving new data.
