@@ -59,6 +59,8 @@ export class UKPostCodeValidation implements ComponentFramework.StandardControl<
     }
     container.appendChild(this._inputElement);
     container.appendChild(this._container); // append error container after input container
+
+    this._inputElement.addEventListener("input", this._refreshData); // register refreshData event listener
 }
 
 
