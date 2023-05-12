@@ -23,7 +23,7 @@
         <Description description="ChayeNovak" languagecode="1033" />
       </Descriptions>
       <EMailAddress>chaye1@live.co.uk</EMailAddress>
-      <SupportingWebsiteUrl></SupportingWebsiteUrl>
+      <SupportingWebsiteUrl>https://github.com/ChayeNovak/UKPostcodeValidation</SupportingWebsiteUrl>
       <!-- Customization Prefix for the Cds Publisher-->
       <CustomizationPrefix>cn</CustomizationPrefix>
       <!-- Derived Option Value Prefix for the Customization Prefix of Cds Publisher -->
