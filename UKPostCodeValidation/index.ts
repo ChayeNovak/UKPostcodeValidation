@@ -49,10 +49,10 @@ export class UKPostCodeValidation implements ComponentFramework.StandardControl<
     this._container.appendChild(errorIconLabelElement);
     this._container.appendChild(errorLabelElement);
 
-    if(this.validation.test(this._value) == true && this._value.length > 0) {//this._value.length
+    if(this.validation.test(this._value) == true && this._value != "") {//this._value.length
         this._inputElement.setAttribute("style", "background: green");
         this.labelElement.innerHTML = "Success";
-    } else if (context.parameters.postCode.raw!.length == 0) {
+    } else if (this._value == "") {
         this._inputElement.setAttribute("style", "background: white");
     } else {
         this._inputElement.setAttribute("style", "background: red");
@@ -76,11 +76,11 @@ export class UKPostCodeValidation implements ComponentFramework.StandardControl<
      */
     public updateView(context: ComponentFramework.Context<IInputs>): void
 {
-    if(this.validation.test(context.parameters.postCode.raw!) == true && context.parameters.postCode.raw!.length > 0) {
+    if(this.validation.test(context.parameters.postCode.raw!) == true && context.parameters.postCode.raw! != "") {
         this._inputElement.setAttribute("style", "background: green");
         this.labelElement.innerHTML = "Success";
         this._container.style.display = "none"; // Hide the error container
-    } else if (context.parameters.postCode.raw!.length == 0) {
+    } else if (context.parameters.postCode.raw! == "") {
         this._inputElement.setAttribute("style", "background: white");
         this._container.style.display = "none"; // Hide the error container
     } else {
