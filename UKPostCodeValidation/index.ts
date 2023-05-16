@@ -32,7 +32,7 @@ export class UKPostCodeValidation implements ComponentFramework.StandardControl<
     this._inputElement = document.createElement("input");
     this._inputElement.setAttribute("type", "text");
     this._inputElement.setAttribute("placeholder", "");
-    this._value = context.parameters.postCode.raw!;
+    this._value = context.parameters.postCode.raw || ""; //amended
     this._inputElement.value = this._value;
     this._notifyOutputChanged = notifyOutputChanged;
     this._refreshData = this.refreshData.bind(this);
@@ -49,11 +49,12 @@ export class UKPostCodeValidation implements ComponentFramework.StandardControl<
     this._container.appendChild(errorIconLabelElement);
     this._container.appendChild(errorLabelElement);
 
-    if(this.validation.test(context.parameters.postCode.raw!) == true && context.parameters.postCode.raw!.length > 0) {
+    if(this.validation.test(this._value) == true && this._value != "") {//this._value.length
         this._inputElement.setAttribute("style", "background: green");
         this.labelElement.innerHTML = "Success";
-    } else if (context.parameters.postCode.raw!.length == 0) {
+    } else if (context.parameters.postCode.raw! == "" || context.parameters.postCode.raw! == null || context.parameters.postCode.raw! == undefined || 0) {
         this._inputElement.setAttribute("style", "background: white");
+        this._container.style.display = "none"; // Hide the error container
     } else {
         this._inputElement.setAttribute("style", "background: red");
     }
@@ -65,7 +66,7 @@ export class UKPostCodeValidation implements ComponentFramework.StandardControl<
 
 
     public refreshData(evt: Event): void {
-        this._value = (this._inputElement.value as any) as string;
+        this._value = (this._inputElement.value);
         this.labelElement.innerHTML = this._inputElement.value;
         this._notifyOutputChanged();
      }
@@ -76,11 +77,11 @@ export class UKPostCodeValidation implements ComponentFramework.StandardControl<
      */
     public updateView(context: ComponentFramework.Context<IInputs>): void
 {
-    if(this.validation.test(context.parameters.postCode.raw!) == true && context.parameters.postCode.raw!.length > 0) {
+    if(this.validation.test(context.parameters.postCode.raw!) == true && context.parameters.postCode.raw! != "") {
         this._inputElement.setAttribute("style", "background: green");
         this.labelElement.innerHTML = "Success";
         this._container.style.display = "none"; // Hide the error container
-    } else if (context.parameters.postCode.raw!.length == 0) {
+    } else if (context.parameters.postCode.raw! == "" || null || undefined || 0) {
         this._inputElement.setAttribute("style", "background: white");
         this._container.style.display = "none"; // Hide the error container
     } else {
